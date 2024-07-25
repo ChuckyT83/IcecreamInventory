@@ -13,8 +13,12 @@ using namespace std;
 int main() {
 
     SalesPrediction currentSales;
-    currentSales.salesPrediction();
-    
+    try {
+        currentSales.salesPrediction();
+    } catch (const char* msg) {
+        cerr << msg << endl;
+    }
+
     return 0;
 
 }

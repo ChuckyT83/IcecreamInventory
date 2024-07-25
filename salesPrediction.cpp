@@ -11,35 +11,38 @@ void SalesPrediction::salesPrediction(){
     printSalesData();
     salesAnalysis();
     printSalesAnalysis();
+    outputSalesData();
 }
 
 void SalesPrediction::parseSalesData(string month) {
 
 
-    string filename = "./data/" + month + "salesData.txt";
+    string filename = "./data/" + month + "SalesData.txt";
     ifstream inputFile(filename);
 
-    if (!inputFile.is_open()) {
-        cerr << "Couldn't read file: " << filename << "\n";
-    }
-    
-    //Populate the salesDataHeader array
-    for(typeCount = 0; typeCount < 6; typeCount++) {
-        inputFile >> salesDataHeader[typeCount];
-    }
-    //Populate the salesDataDate array and the salesData array
-    for(dateCount = 0; dateCount < 31; dateCount++) {
-        for(typeCount = 0; typeCount < 6; typeCount++) {
-            if (typeCount == 0) {
-                inputFile >> salesDataDate[dateCount];
-            }
-            else{
-                inputFile >> salesData[typeCount - 1][dateCount];
-            }
+ 
+        if (!inputFile.is_open()) {
+            throw invalid_argument("Couldn't open file: " + filename);
         }
-    }
-    setNumDays(monthNum);
-    inputFile.close();
+        else {
+            //Populate the salesDataHeader array
+            for(typeCount = 0; typeCount < 6; typeCount++) {
+                inputFile >> salesDataHeader[typeCount];
+            }
+            //Populate the salesDataDate array and the salesData array
+            for(dateCount = 0; dateCount < 31; dateCount++) {
+                for(typeCount = 0; typeCount < 6; typeCount++) {
+                    if (typeCount == 0) {
+                        inputFile >> salesDataDate[dateCount];
+                    }
+                    else{
+                        inputFile >> salesData[typeCount - 1][dateCount];
+                    }
+                }
+            }
+            setNumDays(monthNum);
+            inputFile.close();
+        }
 }
 
 string SalesPrediction::setMonth() {
@@ -154,11 +157,12 @@ void SalesPrediction::setNumDays(int month) {
 
 void SalesPrediction::printSalesData() {
     //print the salesDataHeader array
+    cout << endl << endl << "Sales Data for " << currentMonth << endl << "-----------------------" << endl;
     for (typeCount = 0; typeCount < 6; typeCount++) {
         cout << setw(12) << salesDataHeader[typeCount];
     }
+    
     cout << endl;
-
     //print the salesDataDate array and the salesData array
     for (int dateCount = 0; dateCount < numDays; dateCount++) {
         for (int typeCount = 0; typeCount < 6; typeCount++) {
@@ -258,7 +262,7 @@ void SalesPrediction::predictSales() {
     int monthNum = stoi(salesDataDate[0].substr(0, 1));
     float predModifier = 1;  //Modifier for the predicted sales
 
-    //As sales should increase in the summer months and decrease in the fall, and stay relatively stable otherwise, 
+    //As sales should increase in the summer months, decrease in the fall, and stay relatively stable otherwise, 
     //the modifier will be adjusted based on the month.
     //Current logic is to increase sales for the next month by 10% in March, 20% in April and May, 30% in June, and decrease by 10% in August, September, and October
     //Other months keep the modifier at 1
@@ -294,6 +298,54 @@ void SalesPrediction::predictSales() {
     //Calculate the predicted sales for the next month
     for (int typeCount = 0; typeCount < 5; typeCount++) {
         predictedSales[typeCount] = totalSalesType[typeCount] * predModifier;
+    }
+}
+
+void SalesPrediction::outputSalesData() {
+    //Output the sales data to a file
+    string filename = "./output/" + currentMonth + "Analysis.txt";
+    ofstream outputFile(filename);
+
+    if (!outputFile.is_open()) {
+        throw invalid_argument("Couldn't write file: " + filename);
+    }
+    else {
+        //Output the sales data to the file
+        outputFile << setw(12) << "Sales Data for " << currentMonth << endl << "-----------------------" << endl;
+
+        for (typeCount = 0; typeCount < 6; typeCount++) {
+            outputFile << setw(12) << salesDataHeader[typeCount];
+        }
+
+        outputFile << endl;
+        for (int dateCount = 0; dateCount < numDays; dateCount++) {
+            for (int typeCount = 0; typeCount < 6; typeCount++) {
+                if (typeCount == 0) {
+                    outputFile << setw(12) << salesDataDate[dateCount];
+                }
+                else {
+                    outputFile << setw(12) << salesData[typeCount - 1][dateCount];
+                }
+            }
+            outputFile << endl;
+        }
+
+        //Output the sales analysis to the file
+        outputFile << endl << endl << "Sales Analysis for " << currentMonth << endl << "-----------------------" << endl;
+        outputFile << "Total Sales for " << currentMonth << ": " << totalSales << endl;
+        outputFile << "Average Daily Sales for " << currentMonth << ": " << averageSales << endl;
+        outputFile << "Highest Daily Sales for " << currentMonth << ": " << highestSales << " on " << salesDataDate[highestSalesDay] << endl;
+        outputFile << "Lowest Daily Sales for " << currentMonth << ": " << lowestSales << " on " << salesDataDate[lowestSalesDay] << endl << endl;
+        
+        outputFile << "Sales Analysis by Type - Ice Cream is per gallon/Cones is per case" << endl << "-----------------------" << endl;
+        for (int typeCount = 0; typeCount < 5; typeCount++) {
+            outputFile << "Average Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << averageSalesType[typeCount] << endl;
+            outputFile << "Highest Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << highestSalesType[typeCount] << " on " << salesDataDate[highestSalesTypeDay[typeCount]] << endl;
+            outputFile << "Lowest Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << lowestSalesType[typeCount] << " on " << salesDataDate[lowestSalesTypeDay[typeCount]] << endl;
+            outputFile << "Total Sales for " << salesDataHeader[typeCount + 1] << ": " << totalSalesType[typeCount] << endl;
+            outputFile << "Predicted Sales for " << salesDataHeader[typeCount + 1] << " next month: " << predictedSales[typeCount] << endl << endl;
+        }
+        outputFile.close();
     }
 }
 

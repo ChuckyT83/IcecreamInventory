@@ -5,6 +5,7 @@ using namespace std;
 class SalesPrediction {
     public:
         void salesPrediction();
+    private:
         string setMonth();
         void parseSalesData(string month);
         void printSalesData();
@@ -12,7 +13,7 @@ class SalesPrediction {
         void printSalesAnalysis();
         void predictSales();
         void setNumDays(int month);
-    private:
+        void outputSalesData();
         string salesDataHeader[6]; //Array to hold the header data from the sales data file
         string salesDataDate[31]; //Array to hold the date data from the sales data file
         int salesData[5][31]; //Array to hold the sales data from the sales data file
