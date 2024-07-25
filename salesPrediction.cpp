@@ -9,6 +9,7 @@ using namespace std;
 void SalesPrediction::salesPrediction(){
     parseSalesData();
     printSalesData();
+    salesAnalysis();
     printSalesAnalysis();
     predictSales();
 }
@@ -171,8 +172,7 @@ void SalesPrediction::printSalesData() {
     }
 }
 
-void SalesPrediction::printSalesAnalysis() {
-    
+void SalesPrediction::salesAnalysis() {
     //Calculate the total sales
     for (int dateCount = 0; dateCount < numDays; dateCount++) {
         for (int typeCount = 0; typeCount < 5; typeCount++) {
@@ -228,24 +228,36 @@ void SalesPrediction::printSalesAnalysis() {
             lowestSalesDay = dateCount;
         }
     }
+
+    predictSales();
+}
+void SalesPrediction::printSalesAnalysis() {
+    
+    
     
     //Print results
+    cout << endl << "Sales Analysis for " << currentMonth << endl << "-----------------------" << endl;
     cout << endl << "Total Sales for " << currentMonth << ": " << totalSales << endl;
     cout << "Average Daily Sales for " << currentMonth << ": " << averageSales << endl;
     cout << "Highest Daily Sales for " << currentMonth << ": " << highestSales << " on " << salesDataDate[highestSalesDay] << endl;
     cout << "Lowest Daily Sales for " << currentMonth << ": " << lowestSales << " on " << salesDataDate[lowestSalesDay] << endl << endl;
+    
+    cout << "Sales Analysis by Type - Ice Cream is per gallon/Cones is per case" << endl << "-----------------------" << endl;
     for (int typeCount = 0; typeCount < 5; typeCount++) {
-        cout << "Total Sales for " << salesDataHeader[typeCount + 1] << ": " << totalSalesType[typeCount] << endl;
         cout << "Average Sales for " << salesDataHeader[typeCount + 1] << ": " << averageSalesType[typeCount] << endl;
         cout << "Highest Sales for " << salesDataHeader[typeCount + 1] << ": " << highestSalesType[typeCount] << " on " << salesDataDate[highestSalesTypeDay[typeCount]] << endl;
-        cout << "Lowest Sales for " << salesDataHeader[typeCount + 1] << ": " << lowestSalesType[typeCount] << " on " << salesDataDate[lowestSalesTypeDay[typeCount]] << endl << endl;
+        cout << "Lowest Sales for " << salesDataHeader[typeCount + 1] << ": " << lowestSalesType[typeCount] << " on " << salesDataDate[lowestSalesTypeDay[typeCount]] << endl;
+        cout << "Total Sales for " << salesDataHeader[typeCount + 1] << ": " << totalSalesType[typeCount] << endl;
+        cout << "Predicted Sales for " << salesDataHeader[typeCount + 1] << " next month: " << predictedSales[typeCount] << endl << endl;
     }
 }
 
 void SalesPrediction::predictSales() {
     int monthNum = stoi(salesDataDate[0].substr(0, 1));
     float predModifier = 1;  //Modifier for the predicted sales based on the month
+
     //Current logic is to increase sales for the next month by 10% in March, 20% in April and May, 30% in June, and decrease by 10% in August and September
+    //Other months keep the modifier at 1
     switch (monthNum)
     {
         case 3:
@@ -270,12 +282,11 @@ void SalesPrediction::predictSales() {
             predModifier = 1;
             break;   
     }
-
+    //TODO - Add logic to compare sales for the current month to the previous month and adjust the modifier accordingly
 
     //Calculate the predicted sales for the next month
     for (int typeCount = 0; typeCount < 5; typeCount++) {
-            cout << "Total Sales for " << salesDataHeader[typeCount + 1] << ": " << totalSalesType[typeCount] << endl;
-            cout << "Predicted Sales for " << salesDataHeader[typeCount + 1] << " next month: " << totalSalesType[typeCount] * predModifier << endl << endl;
+        predictedSales[typeCount] = totalSalesType[typeCount] * predModifier;
     }
 }
 
