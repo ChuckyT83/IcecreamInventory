@@ -7,24 +7,20 @@
 using namespace std;
 
 void SalesPrediction::salesPrediction(){
-    parseSalesData();
+    parseSalesData(setMonth());
     printSalesData();
     salesAnalysis();
     printSalesAnalysis();
-    predictSales();
 }
 
-void SalesPrediction::parseSalesData() {
+void SalesPrediction::parseSalesData(string month) {
 
-    string input;
-    cout << "Enter the month for the sales data: ";
-    cin >> input;
 
-    string filename = input + "salesData.txt";
+    string filename = "./data/" + month + "salesData.txt";
     ifstream inputFile(filename);
 
     if (!inputFile.is_open()) {
-        cout << "Couldn't read file: " << filename << "\n";
+        cerr << "Couldn't read file: " << filename << "\n";
     }
     
     //Populate the salesDataHeader array
@@ -42,13 +38,19 @@ void SalesPrediction::parseSalesData() {
             }
         }
     }
-
+    setNumDays(monthNum);
     inputFile.close();
 }
 
 string SalesPrediction::setMonth() {
     //Get the month number from the first character of the first date in the salesDataDate array
-    int monthNum = stoi(salesDataDate[0].substr(0, 1));
+    cout << "Enter the month number for the sales data: ";
+    cin >> monthNum;
+    while(monthNum < 1 || monthNum > 12){
+        cout << "Invalid month number. Please enter a number between 1 and 12: ";
+        cin >> monthNum;
+    }
+
     string month;
     //Set the month name based on the month number
     switch (monthNum)
@@ -92,20 +94,22 @@ string SalesPrediction::setMonth() {
         default:
             month = "Invalid month";
             break;
-    }
-    setNumDays(monthNum);
+    } 
+    currentMonth = month;
     return month;
 }
 
 void SalesPrediction::setNumDays(int month) {
-    //Set the number of days in the month based on the month number
-    int year = stoi(salesDataDate[0].substr(4, 4));
+    //Set the number of days in the month
+
+    int year = stoi(salesDataDate[0].substr(4, 4)); //year for leap year calculation
     switch (month)
     {
         case 1:
             numDays = 31;
             break;
         case 2:
+            //Check if the year is a leap year
             if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
                 numDays = 29;
             }
@@ -149,9 +153,6 @@ void SalesPrediction::setNumDays(int month) {
 }
 
 void SalesPrediction::printSalesData() {
-    //Set the current month
-    currentMonth = setMonth();
-
     //print the salesDataHeader array
     for (typeCount = 0; typeCount < 6; typeCount++) {
         cout << setw(12) << salesDataHeader[typeCount];
@@ -231,6 +232,7 @@ void SalesPrediction::salesAnalysis() {
 
     predictSales();
 }
+
 void SalesPrediction::printSalesAnalysis() {
     
     
@@ -244,9 +246,9 @@ void SalesPrediction::printSalesAnalysis() {
     
     cout << "Sales Analysis by Type - Ice Cream is per gallon/Cones is per case" << endl << "-----------------------" << endl;
     for (int typeCount = 0; typeCount < 5; typeCount++) {
-        cout << "Average Sales for " << salesDataHeader[typeCount + 1] << ": " << averageSalesType[typeCount] << endl;
-        cout << "Highest Sales for " << salesDataHeader[typeCount + 1] << ": " << highestSalesType[typeCount] << " on " << salesDataDate[highestSalesTypeDay[typeCount]] << endl;
-        cout << "Lowest Sales for " << salesDataHeader[typeCount + 1] << ": " << lowestSalesType[typeCount] << " on " << salesDataDate[lowestSalesTypeDay[typeCount]] << endl;
+        cout << "Average Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << averageSalesType[typeCount] << endl;
+        cout << "Highest Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << highestSalesType[typeCount] << " on " << salesDataDate[highestSalesTypeDay[typeCount]] << endl;
+        cout << "Lowest Daily Sales for " << salesDataHeader[typeCount + 1] << ": " << lowestSalesType[typeCount] << " on " << salesDataDate[lowestSalesTypeDay[typeCount]] << endl;
         cout << "Total Sales for " << salesDataHeader[typeCount + 1] << ": " << totalSalesType[typeCount] << endl;
         cout << "Predicted Sales for " << salesDataHeader[typeCount + 1] << " next month: " << predictedSales[typeCount] << endl << endl;
     }
@@ -254,9 +256,11 @@ void SalesPrediction::printSalesAnalysis() {
 
 void SalesPrediction::predictSales() {
     int monthNum = stoi(salesDataDate[0].substr(0, 1));
-    float predModifier = 1;  //Modifier for the predicted sales based on the month
+    float predModifier = 1;  //Modifier for the predicted sales
 
-    //Current logic is to increase sales for the next month by 10% in March, 20% in April and May, 30% in June, and decrease by 10% in August and September
+    //As sales should increase in the summer months and decrease in the fall, and stay relatively stable otherwise, 
+    //the modifier will be adjusted based on the month.
+    //Current logic is to increase sales for the next month by 10% in March, 20% in April and May, 30% in June, and decrease by 10% in August, September, and October
     //Other months keep the modifier at 1
     switch (monthNum)
     {
@@ -276,6 +280,9 @@ void SalesPrediction::predictSales() {
             predModifier = .9;
             break;
         case 9:
+            predModifier = .9;
+            break;
+        case 10:
             predModifier = .9;
             break;
         default:

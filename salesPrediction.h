@@ -6,7 +6,7 @@ class SalesPrediction {
     public:
         void salesPrediction();
         string setMonth();
-        void parseSalesData();
+        void parseSalesData(string month);
         void printSalesData();
         void salesAnalysis();
         void printSalesAnalysis();
@@ -34,6 +34,7 @@ class SalesPrediction {
         int predictedSales[5] = {0, 0, 0, 0, 0}; //Array to hold the predicted sales for each type of ice cream/cone
         int tempSales = 0;
         int numDays;
+        int monthNum;
         string currentMonth;
         
 };
