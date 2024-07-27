@@ -15,46 +15,18 @@ const double waffleconeValue = 1.50;
 const double sugarconeValue = 1;
 
 
-//allows user to input a new sale
-void Sale::inputNewSale()
+string monthSetter()
 {
-
-
-
-}
-
-//allows user to output information and calculations about a specific saved date
-void Sale::outputSale()
-{
-    //function-specific variables
-    int month;
-    string date;
-    string monthString;
-    bool validInput = false;
-
-    //Asks the user to input a date until a date in the correct format has been entered.
-    while (validInput == false)
-    {
-        cout << "Enter the month, day, and year for the day of sales you would like to search in the format MM/DD/YYYY: " << endl;
-        cin >> date;
-
-        if (date.size()>= 8 && date.size()<= 10)
-        {
-            validInput = true;
-        }
-        else
-        {
-            cout << "Please enter a valid date in the proper format." << endl;
-        }
-    }
-    
-
     //Asks user to input month in number format again.
     //Asks until valid input is confirmed
-    validInput = false;
+    //used for both the input and output modules
+    
+    bool validInput = false; //sentinel value for input validation
+    int month; //user inputted month
+    string monthString; //returned string form of month
     while (validInput == false)
     {
-        cout << "Please enter the digit of the specific month you'd like to search." << endl;
+        cout << "Please enter the digit of the specific month you'd like to search/add to." << endl;
         cin >> month;
         switch (month)
         { 
@@ -111,26 +83,101 @@ void Sale::outputSale()
                 break;
         };
     }
+    return monthString;
+}
+
+string dateSetter()
+{
+    //Asks the user to input a date until a date in the correct format has been entered.
+    //used for both the input and output modules
+
+    bool validInput=false;//sentinel value for input validation
+    string date;//user inputted date
+
+    while (validInput == false)
+    {
+        cout << "Enter the month, day, and year for the day of sales you would like to search/add in the format MM/DD/YYYY: " << endl;
+        cin >> date;
+
+        if (date.size()>= 8 && date.size()<= 10)
+        {
+            validInput = true;
+        }
+        else
+        {
+            cout << "Please enter a valid date in the proper format." << endl;
+        }
+    }
+
+    return date;
+}
+
+//allows user to input a new sale
+void Sale::inputNewSale()
+{
+    int month;//user inputted month
+    string newDate = dateSetter();//has user input date
+    string monthString = monthSetter();//turns month into string
+    int salesPerObject[5];//array to hold amount of each item sold.
+    
+    //user input for new date in data file
+    cout << "Please enter number of sales for each item in the order: Chocolate, Vanilla, Strawberry, Waffle Cone, Sugar Cone with a space between each number: " << endl;
+    cin >> salesPerObject[0] >> salesPerObject[1] >> salesPerObject[2] >> salesPerObject[3] >> salesPerObject[4];
+    
+    //formats month into name of save file
+    string filename = "./data/" + monthString + "SalesData.txt";
+
+    //open data file
+    fstream dataFile(filename, ios::ate | ios::app);
+
+
+    //writes input from user to the end of selected month's data file
+    if (dataFile.is_open())
+    {
+        dataFile << newDate << " " << salesPerObject[0] << " " << salesPerObject[1] << " " << salesPerObject[2] << " " << salesPerObject[3] << " " << salesPerObject[4] << endl;
+    }
+    //lets user know process was a success
+    cout << "Success!" << endl;
+
+    //close data file, return to main
+    dataFile.close();
+}
+
+//allows user to output information and calculations about a specific saved date
+void Sale::outputSale()
+{
+    //function-specific variables
+    string searchDate;//user input date to search for
+    string monthString;//string form of month
+    bool validInput = false;//sentinel value for input validation
+
+    //gets date from user and turns month into string form
+    searchDate = dateSetter();
+    monthString = monthSetter();
+    
+    
         
     //open file
     string filename = "./data/" + monthString + "SalesData.txt";
     ifstream dataFile(filename);
 
-    //simple bool who's only purpose is to tell user that they had a successful search
-    bool searchSuccess;
+    
+    bool searchSuccess;//simple bool who's only purpose is to tell user that they had a successful search
 
-    //dummy string to hold header line in data file
-    string headerLine;
+    
+    string headerLine;//dummy string to hold header line in data file
     getline(dataFile, headerLine, '\n');
 
     //parses through every line and stops to print data when the correct line is found
     while(dataFile >> dateSold >> amountChocolateSold >> amountVanillaSold >> amountStrawberrySold >> amountWaffleconeSold >> amountSugarconeSold)
     {
 
-        if (dateSold == date)
+        if (dateSold == searchDate)
         {
+            //lets user know process was success
             cout << "Date of sales found!" << "\n" << "\n";
 
+            //initializes and calculates variable for total daily sales
             double totalDailySales = amountChocolateSold + amountVanillaSold + amountStrawberrySold + amountWaffleconeSold + amountSugarconeSold;
 
             //decorative header lines
@@ -151,10 +198,10 @@ void Sale::outputSale()
             searchSuccess = true;
         }
 
-        //close file
-        dataFile.close();
+        
     }
-    
+    //close file
+    dataFile.close();
     //lets user know if search was a success or not
     if (searchSuccess == true)
     {
@@ -171,12 +218,12 @@ void Sale::outputSale()
 void Sale::calculateOutputProfits(string date, double chocolate, double vanilla, double strawberry, double wafflecones, double sugarcones)
 {
     //variables & calculations
-    double chocolateProfits = chocolate * icecreamValue;
-    double vanillaProfits = vanilla * icecreamValue;
-    double strawberryProfits = strawberry * icecreamValue;
-    double waffleconeProfits = wafflecones * waffleconeValue;
-    double sugarconeProfits = sugarcones * sugarconeValue;
-    double totalProfits = chocolateProfits + vanillaProfits + strawberryProfits + waffleconeProfits + sugarconeProfits;
+    double chocolateProfits = chocolate * icecreamValue;//amount of money made from chocolate
+    double vanillaProfits = vanilla * icecreamValue;//amount of money made from vanilla
+    double strawberryProfits = strawberry * icecreamValue;//amount of money made from strawberry
+    double waffleconeProfits = wafflecones * waffleconeValue;//amount of money made from waffle cones
+    double sugarconeProfits = sugarcones * sugarconeValue;//amount of money made from sugar cones
+    double totalProfits = chocolateProfits + vanillaProfits + strawberryProfits + waffleconeProfits + sugarconeProfits;//total profits
     
     //decorative header lines
     cout<< "\n" << setw(32) << "--Profits--" << endl;
