@@ -4,6 +4,8 @@
 #include <string>
 #include "salesPrediction.h"
 #include "salesInputOutput.h"
+#include "stockManagement.h"
+
 
 
 using namespace std;
@@ -16,6 +18,8 @@ int main() {
     const int exitNum = 9;
     int menuChoice = 0;
 
+    loadStockData(); // This loads the stock data at the start
+
     while (menuChoice != 9)
     {
         cout << "Welcome to ICIM (Ice Cream Inventory Manager)" << "\n\n" <<
@@ -23,7 +27,10 @@ int main() {
         << "1. Input sales data of a specific date" << "\n"
         << "2. Output sales data and profits of a specific date" << "\n"
         << "3. Calculate sales prediction for the future" << "\n"
-        //TODO: Selma, please add menu selections for your parts of the project here.
+        << "4. Input current stock" << "\n"
+        << "5. Order more stock" << "\n"
+        << "6. Unit Converter" << "\n"
+        << "7. View current stock" << "\n"
         << "9. Exit the program." << "\n";
         cin >> menuChoice;
 
@@ -49,7 +56,22 @@ int main() {
                 cerr << msg << endl;
             }
         }
-        //TODO: Selma, call your functions here
+         else if (menuChoice == 4)
+        {
+            inputCurrentStock();  // Call the function to input current stock
+        }
+        else if (menuChoice == 5)
+        {
+            orderMoreStock();    // Call the function to order more stock
+        }
+        else if (menuChoice == 6)
+        {
+            unitConverter();    // Call the function to convert units
+        }
+          else if (menuChoice == 7)  // Handle new menu option
+        {
+            viewCurrentStock(); // Call the function to view current stock
+        }
         else if (menuChoice == 9)
         {
             cout << "Goodbye!" << endl;
@@ -59,5 +81,8 @@ int main() {
             cout << "Unknown menu choice, please try again." << endl;
         }
     }
+
+    saveStockData();
+    
     return 0;
 }
