@@ -21,7 +21,7 @@ int main() {
         cout << "Welcome to ICIM (Ice Cream Inventory Manager)" << "\n\n" <<
         "What would you like to do?" << "\n" 
         << "1. Input sales data of a specific date" << "\n"
-        << "2. Output sales data and profits of a specific month" << "\n"
+        << "2. Output sales data and profits of a specific date" << "\n"
         << "3. Calculate sales prediction for the future" << "\n"
         //TODO: Selma, please add menu selections for your parts of the project here.
         << "9. Exit the program." << "\n";

@@ -7,15 +7,15 @@
 using namespace std;
 
 void SalesPrediction::salesPrediction(){
-    parseSalesData(setMonth());
-    printSalesData();
-    salesAnalysis();
-    printSalesAnalysis();
-    outputSalesData();
+    parseSalesData(setMonth()); //Parse the sales data for the month
+    printSalesData(); //Print the sales data
+    salesAnalysis(); //Analyze the sales data
+    printSalesAnalysis(); //Print the sales analysis
+    outputSalesData(); //Output the sales data to a file
 }
 
 void SalesPrediction::parseSalesData(string month) {
-
+//This function takes the month as an argument and parses the sales data from the file for that month, storing it in the salesDataHeader, salesDataDate, and salesData arrays
 
     string filename = "./data/" + month + "SalesData.txt";
     ifstream inputFile(filename);
@@ -49,10 +49,12 @@ string SalesPrediction::setMonth() {
     //Get the month number from the first character of the first date in the salesDataDate array
     cout << "Enter the month number for the sales data: ";
     cin >> monthNum;
-    while(monthNum < 1 || monthNum > 12){
-        cout << "Invalid month number. Please enter a number between 1 and 12: ";
-        cin >> monthNum;
-    }
+        while (cin.fail() || monthNum < 1 || monthNum > 12) { //if cin is in a fail state, clear and ignore input and prompt user to enter valid input
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid input. Please enter a valid number between 1 and 12: ";
+            cin >> monthNum;
+        }
 
     string month;
     //Set the month name based on the month number
@@ -178,6 +180,7 @@ void SalesPrediction::printSalesData() {
 }
 
 void SalesPrediction::salesAnalysis() {
+    //This function calulates the total sales, average sales, highest and lowest sales, and calls the predictSales function to calculate the predicted sales for the next month
     //Calculate the total sales
     for (int dateCount = 0; dateCount < numDays; dateCount++) {
         for (int typeCount = 0; typeCount < 5; typeCount++) {
@@ -259,6 +262,7 @@ void SalesPrediction::printSalesAnalysis() {
 }
 
 void SalesPrediction::predictSales() {
+    //Predict the sales for the next month using a rudiemntary algorithm
     int monthNum = stoi(salesDataDate[0].substr(0, 1));
     float predModifier = 1;  //Modifier for the predicted sales
 

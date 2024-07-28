@@ -1,0 +1,74 @@
+Sales Data for April
+-----------------------
+        Date   Chocolate     Vanilla  Strawberry  WaffleCone   SugarCone
+    4/1/2024          30          34          28          19          41
+    4/2/2024          25          30          26          11          31
+    4/3/2024          42          43          29          32          40
+    4/4/2024          34          34          28          19          43
+    4/5/2024          25          30          26          16          36
+    4/6/2024          43          43          29          35          44
+    4/7/2024          37          34          28          19          41
+    4/8/2024          24          30          26          27          35
+    4/9/2024          41          43          29          35          42
+   4/10/2024          37          34          28          19          42
+   4/11/2024          25          30          26          11          31
+   4/12/2024          42          43          29          35          40
+   4/13/2024          33          34          28          19          41
+   4/14/2024          27          30          26          16          33
+   4/15/2024          48          43          24          35          44
+   4/16/2024          36          34          28          22          45
+   4/17/2024          22          30          25          17          36
+   4/18/2024          49          43          29          35          41
+   4/19/2024          39          34          27          19          42
+   4/20/2024          22          30          26          14          36
+   4/21/2024          41          43          20          35          45
+   4/22/2024          30          34          28          19          41
+   4/23/2024          21          30          22          12          36
+   4/24/2024          42          43          24          35          47
+   4/25/2024          30          34          28          19          42
+   4/26/2024          25          30          22          11          36
+   4/27/2024          42          43          31          35          42
+   4/28/2024          30          34          19          19          44
+   4/29/2024          29          29          26          10          36
+   4/30/2024          10          10          10          10          10
+
+
+Sales Analysis for April
+-----------------------
+Total Sales for April: 4615
+Average Daily Sales for April: 153
+Highest Daily Sales for April: 197 on 4/18/2024
+Lowest Daily Sales for April: 50 on 4/30/2024
+
+Sales Analysis by Type - Ice Cream is per gallon/Cones is per case
+-----------------------
+Average Daily Sales for Chocolate: 32
+Highest Daily Sales for Chocolate: 49 on 4/18/2024
+Lowest Daily Sales for Chocolate: 10 on 4/30/2024
+Total Sales for Chocolate: 981
+Predicted Sales for Chocolate next month: 1177
+
+Average Daily Sales for Vanilla: 34
+Highest Daily Sales for Vanilla: 43 on 4/3/2024
+Lowest Daily Sales for Vanilla: 10 on 4/30/2024
+Total Sales for Vanilla: 1036
+Predicted Sales for Vanilla next month: 1243
+
+Average Daily Sales for Strawberry: 25
+Highest Daily Sales for Strawberry: 31 on 4/27/2024
+Lowest Daily Sales for Strawberry: 10 on 4/30/2024
+Total Sales for Strawberry: 775
+Predicted Sales for Strawberry next month: 930
+
+Average Daily Sales for WaffleCone: 22
+Highest Daily Sales for WaffleCone: 35 on 4/6/2024
+Lowest Daily Sales for WaffleCone: 10 on 4/29/2024
+Total Sales for WaffleCone: 660
+Predicted Sales for WaffleCone next month: 792
+
+Average Daily Sales for SugarCone: 38
+Highest Daily Sales for SugarCone: 47 on 4/24/2024
+Lowest Daily Sales for SugarCone: 10 on 4/30/2024
+Total Sales for SugarCone: 1163
+Predicted Sales for SugarCone next month: 1395
+
